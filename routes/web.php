@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\LevelEnum;
+use App\Livewire\LevelComponent;
 use App\Livewire\TileComponent;
 use Illuminate\Support\Facades\Route;
 
@@ -14,4 +16,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',TileComponent::class);
+Route::get('/', LevelComponent::class)->name('tiles.level');
+Route::get('/play/{level}', TileComponent::class)->whereIn('level', LevelEnum::values()->toArray())->name('tiles.play');
