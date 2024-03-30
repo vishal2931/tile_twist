@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Enums\LevelEnum;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 
 class TileComponent extends Component
@@ -19,14 +18,23 @@ class TileComponent extends Component
 
     public $is_lost = false;
 
-    public $attempted_flipped_tiles, $level, $duration, $icon_names;
+    public $attempted_flipped_tiles = [];
+
+    public $level;
+
+    public $icon_names;
+
+    public $total_steps;
+
+    public $steps;
 
     public function mount($level)
     {
         $this->icon_names = collect([]);
         $this->flipped_tiles = collect([]);
         $this->level = $level;
-        $this->duration = LevelEnum::durations()[$level];
+        $this->total_steps = LevelEnum::steps()[$level];
+        $this->steps = $this->total_steps;
         $this->generateTiles();
     }
 
@@ -37,13 +45,16 @@ class TileComponent extends Component
 
     public function flipTile($flipped_tile, $chunk, $key)
     {
-        $this->attempted_flipped_tiles[$key] = $flipped_tile;
-        if (count($this->attempted_flipped_tiles) === 2) {
-            if (count(array_unique($this->attempted_flipped_tiles)) === 1) {
-                $this->flipped_tiles = $this->flipped_tiles->union($this->attempted_flipped_tiles);
-                $this->points += 1;
+        if (! in_array($flipped_tile, $this->flipped_tiles->toArray()) && (! isset($this->attempted_flipped_tiles[$key]) || $this->attempted_flipped_tiles[$key] != $flipped_tile)) {
+            $this->attempted_flipped_tiles[$key] = $flipped_tile;
+            $this->steps -= 1;
+            if (count($this->attempted_flipped_tiles) === 2) {
+                if (count(array_unique($this->attempted_flipped_tiles)) === 1) {
+                    $this->flipped_tiles = $this->flipped_tiles->union($this->attempted_flipped_tiles);
+                    $this->points += 1;
+                }
+                $this->dispatch('flip-different-tiles');
             }
-            $this->dispatch('flip-different-tiles');
         }
     }
 
@@ -54,7 +65,9 @@ class TileComponent extends Component
         }
         if ($this->icon_names->flatten()->count() === $this->flipped_tiles->count()) {
             $this->dispatch('win-the-game');
-            $this->is_win = true;
+            $this->winGame();
+        } elseif ($this->steps <= 0) {
+            $this->lostGame();
         }
     }
 
@@ -67,6 +80,7 @@ class TileComponent extends Component
         $this->points = 0;
         $this->is_win = false;
         $this->is_lost = false;
+        $this->steps = $this->total_steps;
         $this->generateTiles();
         $this->dispatch('reset-tiles');
     }
@@ -76,6 +90,11 @@ class TileComponent extends Component
         $this->is_lost = true;
     }
 
+    public function winGame()
+    {
+        $this->is_win = true;
+    }
+
     private function generateTiles()
     {
         collect(File::allFiles(public_path('assets/images')))->each(function ($file) {
@@ -83,8 +102,4 @@ class TileComponent extends Component
         });
         $this->icon_names = $this->icon_names->merge($this->icon_names->toArray())->shuffle()->chunk($this->per_row);
     }
-
-
-
-
 }

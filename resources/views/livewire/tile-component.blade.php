@@ -35,8 +35,7 @@
     </div>
     <div class="text-center mt-8">
         @if (!$is_win & !$is_lost)
-            <span class="block mb-3 font-satisfy text-white text-5xl" wire:ignore><span id="minutes"></span> : <span
-                    id="seconds"></span></span>
+            <span class="block mb-3 font-satisfy text-white text-4xl">{{ __('Steps : :step',['step' => $steps]) }}</span>
         @endif
         <button class="rounded-full bg-yellow-300" type="button" title="{{ __('Restart Game') }}"
             wire:click='resetTiles' wire:loading.class='animate-spin' wire:target='resetTiles'
@@ -57,25 +56,7 @@
     <script>
         let container = document.querySelector('.fireworks');
         const fireworks = new Fireworks.default(container);
-        let seconds = $wire.duration * 60;
-        let timer = new easytimer.Timer();
-        timer.start({
-            countdown: true,
-            precision: 'seconds',
-            startValues: {
-                seconds: seconds
-            }
-        });
-
-        timer.addEventListener('secondsUpdated', function(e) {
-            document.getElementById('minutes').innerHTML = timer.getTimeValues().minutes < 10 ? '0' + timer
-                .getTimeValues().minutes : timer.getTimeValues().minutes;
-            document.getElementById('seconds').innerHTML = timer.getTimeValues().seconds < 10 ? '0' + timer
-                .getTimeValues().seconds : timer.getTimeValues().seconds;
-        });
-        timer.addEventListener('targetAchieved', function(e) {
-            $wire.lostGame();
-        });
+        //    $wire.lostGame();
 
         $wire.on('flip-different-tiles', () => {
             setTimeout(() => {
@@ -84,12 +65,10 @@
         });
 
         $wire.on('reset-tiles', () => {
-            timer.reset();
             fireworks.stop();
         });
 
         $wire.on('win-the-game', () => {
-            timer.stop();
             fireworks.start();
         });
     </script>

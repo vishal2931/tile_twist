@@ -1,12 +1,11 @@
 <?php
+
 namespace App\Enums;
 
 use Illuminate\Support\Collection;
-use Route;
 
 enum LevelEnum: string
 {
-
     case BEGINNER = 'beginner';
 
     case INTERMEDIATE = 'intermediate';
@@ -18,12 +17,12 @@ enum LevelEnum: string
         return collect(self::cases())->pluck('value');
     }
 
-    public static function durations(): Collection
+    public static function steps(): Collection
     {
-        $durations = collect([]);
-        self::values()->reverse()->values()->each(function ($value, $key) use (&$durations) {
-            $durations[$value] = ($key + 1) * 2; // Minutes
-        });
-        return $durations;
+        return collect([
+            self::ADVANCED->value => 30,
+            self::INTERMEDIATE->value => 40,
+            self::BEGINNER->value => 50,
+        ]);
     }
 }

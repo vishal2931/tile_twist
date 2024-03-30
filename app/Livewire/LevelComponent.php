@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Enums\LevelEnum;
-use App\Models\User;
 use Livewire\Component;
 
 class LevelComponent extends Component
@@ -23,7 +22,7 @@ class LevelComponent extends Component
     public function selectLevel($level)
     {
         if ($this->levels->contains($level)) {
-            $this->redirect('/play/' . $level);
+            $this->redirect('/play/'.$level);
         }
     }
 }
