@@ -53,9 +53,9 @@ If you have any feedback, please reach out to me at [@vishal__2931](https://twit
 
 ![App Screenshot](https://github.com/vishal2931/tile_twist/assets/41144797/36903869-6f92-4be0-933c-11dd78abda2b)
 
-![App Screenshot](https://github.com/vishal2931/tile_twist/assets/41144797/0a7b62af-10db-4fc1-a502-40f36965ea69)
+![App Screenshot](https://github.com/vishal2931/tile_twist/assets/41144797/ce48eeb5-7024-4ef2-a627-63b2ed8167b1)
 
-![App Screenshot](https://github.com/vishal2931/tile_twist/assets/41144797/17c9ca3e-7af2-468d-91cf-a130d49804b5)
+![App Screenshot](https://github.com/vishal2931/tile_twist/assets/41144797/d926bd2b-a495-4c3b-8ad2-e23d6cc6990e)
 
 ![App Screenshot](https://github.com/vishal2931/tile_twist/assets/41144797/cc932899-4050-4d30-b61c-900ed748de84)
 
